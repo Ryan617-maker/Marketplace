@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Movimentações de Estoque{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h2><i class="bi bi-arrow-left-right"></i> Movimentações de Estoque</h2>
+</div>
+
+<div class="card shadow">
+    <div class="card-body">
+        {% if movimentacoes %}
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Produto</th>
+                        <th>Tipo</th>
+                        <th>Quantidade Movimentada</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mov in movimentacoes %}
+                    <tr>
+                        <td>{{ mov.ID_MOVIMENTACAO_PRODUTO }}</td>
+                        <td class="fw-semibold">{{ mov.PRODUTO }}</td>
+                        <td>
+                            {% if mov.TIPO == 'ENTRADA' %}
+                                <span class="badge bg-success"><i class="bi bi-arrow-down-circle"></i> ENTRADA</span>
+                            {% else %}
+                                <span class="badge bg-danger"><i class="bi bi-arrow-up-circle"></i> SAÍDA</span>
+                            {% endif %}
+                        </td>
+                        <td class="fw-bold">{{ mov.QUANTIDADE_MOVIMENTADA }}</td>
+                        <td>{{ mov.DATA_MOVIMENTACAO.strftime('%d/%m/%Y') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info text-center">
+            <i class="bi bi-info-circle"></i> Nenhuma movimentação registrada.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

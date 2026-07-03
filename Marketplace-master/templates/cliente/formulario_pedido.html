@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Novo Pedido</title>
+</head>
+<body>
+
+<h2>Novo Pedido</h2>
+
+<form method="POST">
+    <label>Data do Pedido</label><br>
+    <input type="date" name="data_pedido" required><br><br>
+
+    <label>Valor Total</label><br>
+    <input type="number" step="0.01" name="valor_total" required><br><br>
+
+    <label>Status</label><br>
+    <select name="status">
+        <option value="Pendente">Pendente</option>
+        <option value="Pago">Pago</option>
+        <option value="Enviado">Enviado</option>
+    </select><br><br>
+
+    <button type="submit">Salvar Pedido</button>
+</form>
+
+<a href="{{ url_for('cliente_pedidos') }}">Voltar</a>
+
+</body>
+</html>

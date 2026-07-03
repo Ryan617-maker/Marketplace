@@ -1,0 +1,131 @@
+{% extends "cliente/base_cliente.html" %}
+
+{% block title %}Minha Conta - Marketplace{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h2><i class="bi bi-person-circle"></i> Minha Conta</h2>
+</div>
+
+<!-- Dados do Cliente -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-person"></i> Meus Dados</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr><th width="35%">Nome:</th><td>{{ cliente.NOME }}</td></tr>
+                    <tr><th>CPF:</th><td>{{ cliente.CPF }}</td></tr>
+                    <tr><th>Data Nascimento:</th><td>{{ cliente.DATA_NASCIMENTO }}</td></tr>
+                    <tr><th>Sexo:</th><td>{{ cliente.SEXO }}</td></tr>
+                </table>
+                <a href="/cliente/dados" class="btn btn-outline-success btn-sm">
+                    <i class="bi bi-pencil"></i> Editar Dados
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow text-center bg-warning">
+            <div class="card-body">
+                <i class="bi bi-cart3 display-4 text-dark"></i>
+                <h3 class="mt-2">{{ pedidos | length }}</h3>
+                <p class="mb-0">Pedidos</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow text-center bg-info">
+            <div class="card-body">
+                <i class="bi bi-credit-card display-4 text-white"></i>
+                <h3 class="mt-2">{{ pagamentos | length }}</h3>
+                <p class="mb-0">Pagamentos</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pedidos Recentes -->
+<div class="card shadow mb-4">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0"><i class="bi bi-clock-history"></i> Meus Pedidos</h5>
+    </div>
+    <div class="card-body">
+        {% if pedidos %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr><th>#</th><th>Data</th><th>Valor Total</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    {% for pedido in pedidos %}
+                    <tr>
+                        <td>{{ pedido.ID_PEDIDO }}</td>
+                        <td>{{ pedido.DATA_PEDIDO }}</td>
+                        <td class="fw-bold text-success">R$ {{ "{:,.2f}".format(pedido.VALOR_TOTAL).replace(',', '_').replace('.', ',').replace('_', '.') }}</td>
+                        <td>
+                            {% if pedido.STATUS == 'PAGO' %}<span class="badge bg-success">PAGO</span>
+                            {% elif pedido.STATUS == 'CANCELADO' %}<span class="badge bg-danger">CANCELADO</span>
+                            {% elif pedido.STATUS == 'ENTREGUE' %}<span class="badge bg-primary">ENTREGUE</span>
+                            {% elif pedido.STATUS == 'ENVIADO' %}<span class="badge bg-info">ENVIADO</span>
+                            {% else %}<span class="badge bg-warning text-dark">PENDENTE</span>{% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <a href="/cliente/pedidos" class="btn btn-sm btn-outline-dark">Ver todos os pedidos</a>
+        {% else %}
+        <p class="text-muted text-center">Você ainda não possui pedidos.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Pagamentos Recentes -->
+<div class="card shadow">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0"><i class="bi bi-receipt"></i> Meus Pagamentos</h5>
+    </div>
+    <div class="card-body">
+        {% if pagamentos %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr><th>ID</th><th>Pedido #</th><th>Forma</th><th>Valor</th><th>Data</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    {% for p in pagamentos %}
+                    <tr>
+                        <td>{{ p.ID_PAGAMENTO }}</td>
+                        <td>{{ p.ID_PEDIDO }}</td>
+                        <td>
+                            {% if p.FORMA_PAGAMENTO == 'PIX' %}<span class="badge bg-success">PIX</span>
+                            {% elif p.FORMA_PAGAMENTO == 'CARTAO_CREDITO' %}<span class="badge bg-primary">Cartão Crédito</span>
+                            {% elif p.FORMA_PAGAMENTO == 'CARTAO_DEBITO' %}<span class="badge bg-info">Cartão Débito</span>
+                            {% else %}<span class="badge bg-warning text-dark">Boleto</span>{% endif %}
+                        </td>
+                        <td class="fw-bold text-success">R$ {{ "{:,.2f}".format(p.VALOR_PAGO).replace(',', '_').replace('.', ',').replace('_', '.') }}</td>
+                        <td>{{ p.DATA_PAGAMENTO }}</td>
+                        <td>
+                            {% if p.STATUS == 'APROVADO' %}<span class="badge bg-success">APROVADO</span>
+                            {% elif p.STATUS == 'RECUSADO' %}<span class="badge bg-danger">RECUSADO</span>
+                            {% elif p.STATUS == 'ESTORNADO' %}<span class="badge bg-secondary">ESTORNADO</span>
+                            {% else %}<span class="badge bg-warning text-dark">PENDENTE</span>{% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <a href="/cliente/pagamentos" class="btn btn-sm btn-outline-dark">Ver todos os pagamentos</a>
+        {% else %}
+        <p class="text-muted text-center">Nenhum pagamento registrado.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Editar Estoque - {{ registro.PRODUTO }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0"><i class="bi bi-pencil"></i> Editar Estoque - {{ registro.PRODUTO }}</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="alert alert-info"><i class="bi bi-info-circle"></i> Produto: <strong>{{ registro.PRODUTO }}</strong></div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Quantidade em Estoque</label>
+                            <input type="number" class="form-control" name="quantidade_estoque" value="{{ registro.QUANTIDADE_ESTOQUE }}" min="0" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Limite Máximo</label>
+                            <input type="number" class="form-control" name="limite_maximo" value="{{ registro.LIMITE_MAXIMO }}" min="1" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Limite Mínimo</label>
+                            <input type="number" class="form-control" name="limite_minimo" value="{{ registro.LIMITE_MINIMO }}" min="0" required>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Salvar</button>
+                        <a href="/admin/estoque" class="btn btn-secondary"><i class="bi bi-x-circle"></i> Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

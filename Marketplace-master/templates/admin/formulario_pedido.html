@@ -1,0 +1,53 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}{{ 'Editar' if pedido else 'Adicionar' }} Pedido{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0"><i class="bi bi-{{ 'pencil' if pedido else 'plus-circle' }}"></i> {{ 'Editar' if pedido else 'Adicionar' }} Pedido</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Cliente</label>
+                        <select class="form-select" name="id_cliente" required>
+                            <option value="">Selecione um cliente</option>
+                            {% for cliente in clientes %}
+                            <option value="{{ cliente.ID_CLIENTE }}" {{ 'selected' if pedido and pedido.ID_CLIENTE == cliente.ID_CLIENTE else '' }}>{{ cliente.NOME }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Data do Pedido</label>
+                            <input type="date" class="form-control" name="data_pedido" value="{{ pedido.DATA_PEDIDO if pedido else '' }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Valor Total (R$)</label>
+                            <input type="number" step="0.01" class="form-control" name="valor_total" value="{{ pedido.VALOR_TOTAL if pedido else '' }}" min="0" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Status</label>
+                        <select class="form-select" name="status" required>
+                            <option value="">Selecione</option>
+                            <option value="PENDENTE" {{ 'selected' if pedido and pedido.STATUS == 'PENDENTE' else '' }}>PENDENTE</option>
+                            <option value="PAGO" {{ 'selected' if pedido and pedido.STATUS == 'PAGO' else '' }}>PAGO</option>
+                            <option value="ENVIADO" {{ 'selected' if pedido and pedido.STATUS == 'ENVIADO' else '' }}>ENVIADO</option>
+                            <option value="ENTREGUE" {{ 'selected' if pedido and pedido.STATUS == 'ENTREGUE' else '' }}>ENTREGUE</option>
+                            <option value="CANCELADO" {{ 'selected' if pedido and pedido.STATUS == 'CANCELADO' else '' }}>CANCELADO</option>
+                        </select>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Salvar</button>
+                        <a href="/admin/pedidos" class="btn btn-secondary"><i class="bi bi-x-circle"></i> Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

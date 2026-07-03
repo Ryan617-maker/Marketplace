@@ -1,0 +1,49 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}{{ 'Editar' if cliente else 'Adicionar' }} Cliente{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0"><i class="bi bi-{{ 'pencil' if cliente else 'plus-circle' }}"></i> {{ 'Editar' if cliente else 'Adicionar' }} Cliente</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nome Completo</label>
+                        <input type="text" class="form-control" name="nome" value="{{ cliente.NOME if cliente else '' }}" required>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">CPF</label>
+                            <input type="text" class="form-control" name="cpf" value="{{ cliente.CPF if cliente else '' }}" maxlength="14" placeholder="000.000.000-00" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Sexo</label>
+                            <select class="form-select" name="sexo" required>
+                                <option value="">Selecione</option>
+                                <option value="Masculino" {{ 'selected' if cliente and cliente.SEXO == 'Masculino' else '' }}>Masculino</option>
+                                <option value="Feminino" {{ 'selected' if cliente and cliente.SEXO == 'Feminino' else '' }}>Feminino</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Data de Nascimento</label>
+                        <input type="date" class="form-control" name="data_nascimento" value="{{ cliente.DATA_NASCIMENTO if cliente else '' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">{{ 'Nova Senha (deixe vazio para manter)' if cliente else 'Senha' }}</label>
+                        <input type="password" class="form-control" name="senha" {{ 'required' if not cliente else '' }} placeholder="{{ 'Senha para login do cliente' if not cliente else 'Mínimo 6 caracteres' }}">
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Salvar</button>
+                        <a href="/admin/clientes" class="btn btn-secondary"><i class="bi bi-x-circle"></i> Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

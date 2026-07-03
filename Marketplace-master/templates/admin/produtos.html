@@ -1,0 +1,54 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Admin - Produtos{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-box-seam"></i> Produtos</h2>
+    <a href="/admin/produto/adicionar" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Adicionar Produto
+    </a>
+</div>
+
+<div class="card shadow">
+    <div class="card-body">
+        {% if produtos %}
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Categoria</th>
+                        <th>Quantidade</th>
+                        <th>Valor Unitário</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for produto in produtos %}
+                    <tr>
+                        <td>{{ produto.ID_PRODUTO }}</td>
+                        <td class="fw-semibold">{{ produto.NOME }}</td>
+                        <td><span class="badge bg-secondary">{{ produto.CATEGORIA }}</span></td>
+                        <td>{{ produto.QUANTIDADE_DISPONIVEL }}</td>
+                        <td class="text-success fw-bold">R$ {{ "{:,.2f}".format(produto.VALOR_UNITARIO).replace(',', '_').replace('.', ',').replace('_', '.') }}</td>
+                        <td>
+                            <a href="/admin/produto/editar/{{ produto.ID_PRODUTO }}" class="btn btn-sm btn-warning">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="/admin/produto/excluir/{{ produto.ID_PRODUTO }}" class="btn btn-sm btn-danger" onclick="return confirm('Deseja realmente excluir este produto?')">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info text-center">Nenhum produto cadastrado.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

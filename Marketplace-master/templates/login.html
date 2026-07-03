@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Marketplace</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .login-card .brand {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .login-card .brand i {
+            font-size: 3rem;
+            color: #0d6efd;
+        }
+        .login-card .brand h2 {
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-top: 0.5rem;
+        }
+        .btn-admin { background-color: #1a1a2e; color: white; border: none; }
+        .btn-admin:hover { background-color: #16213e; color: white; }
+        .btn-cliente { background-color: #198754; color: white; border: none; }
+        .btn-cliente:hover { background-color: #157347; color: white; }
+        .tab-content { padding-top: 1.5rem; }
+        .form-control { border-radius: 10px; padding: 0.7rem 1rem; }
+        .btn-login { border-radius: 10px; padding: 0.7rem; font-weight: 600; font-size: 1.1rem; }
+        .info-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 1rem;
+        }
+        .info-box strong { color: #212529; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="brand">
+            <i class="bi bi-shop"></i>
+            <h2>Marketplace</h2>
+            <p class="text-muted">Faça login para continuar</p>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Tabs -->
+        <ul class="nav nav-pills nav-fill mb-3" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="admin-tab" data-bs-toggle="tab" data-bs-target="#admin-login" type="button">
+                    <i class="bi bi-shield-lock"></i> Admin
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="cliente-tab" data-bs-toggle="tab" data-bs-target="#cliente-login" type="button">
+                    <i class="bi bi-person"></i> Cliente
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <!-- Admin Login -->
+            <div class="tab-pane fade show active" id="admin-login" role="tabpanel">
+                <form method="POST" action="/login">
+                    <input type="hidden" name="tipo" value="admin">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold"><i class="bi bi-person-badge"></i> CPF / Usuário</label>
+                        <input type="text" class="form-control" name="cpf" value="admin" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold"><i class="bi bi-lock"></i> Senha</label>
+                        <input type="password" class="form-control" name="senha" value="admin123" required>
+                    </div>
+                    <button type="submit" class="btn btn-admin btn-login w-100">
+                        <i class="bi bi-box-arrow-in-right"></i> Entrar como Admin
+                    </button>
+                    <div class="info-box mt-3">
+                        <i class="bi bi-info-circle"></i> 
+                        <strong>Dados de acesso Admin:</strong><br>
+                        CPF: <code>admin</code> | Senha: <code>admin123</code>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Cliente Login -->
+            <div class="tab-pane fade" id="cliente-login" role="tabpanel">
+                <form method="POST" action="/login">
+                    <input type="hidden" name="tipo" value="cliente">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold"><i class="bi bi-person-badge"></i> CPF</label>
+                        <input type="text" class="form-control" name="cpf" placeholder="000.000.000-00" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold"><i class="bi bi-lock"></i> Senha</label>
+                        <input type="password" class="form-control" name="senha" required>
+                    </div>
+                    <button type="submit" class="btn btn-cliente btn-login w-100">
+                        <i class="bi bi-box-arrow-in-right"></i> Entrar como Cliente
+                    </button>
+                    <div class="info-box mt-3">
+                        <i class="bi bi-info-circle"></i> 
+                        <strong>Dados de acesso Cliente (exemplo):</strong><br>
+                        CPF: <code>864.159.969-08</code> | Senha: <code>123456</code><br>
+                        <small>O administrador define a senha ao cadastrar o cliente.</small>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

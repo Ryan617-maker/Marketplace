@@ -1,0 +1,117 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Admin - Dashboard{% endblock %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <h1 class="display-5 fw-bold"><i class="bi bi-shield-lock"></i> Painel Administrativo</h1>
+    <p class="text-muted">Visão geral do sistema</p>
+</div>
+
+<!-- Cards Resumo -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white shadow text-center">
+            <div class="card-body">
+                <i class="bi bi-box-seam display-4"></i>
+                <h3 class="mt-2">{{ total_produtos }}</h3>
+                <p class="mb-0">Produtos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white shadow text-center">
+            <div class="card-body">
+                <i class="bi bi-people display-4"></i>
+                <h3 class="mt-2">{{ total_clientes }}</h3>
+                <p class="mb-0">Clientes</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark shadow text-center">
+            <div class="card-body">
+                <i class="bi bi-cart3 display-4"></i>
+                <h3 class="mt-2">{{ total_pedidos }}</h3>
+                <p class="mb-0">Pedidos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white shadow text-center">
+            <div class="card-body">
+                <i class="bi bi-credit-card display-4"></i>
+                <h3 class="mt-2">{{ total_pagamentos }}</h3>
+                <p class="mb-0">Pagamentos</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alertas de Estoque -->
+{% if alertas_estoque %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <i class="bi bi-exclamation-triangle-fill"></i> 
+    <strong>Alerta de Estoque!</strong> Produtos abaixo do limite mínimo:
+    <ul class="mb-0 mt-1">
+        {% for item in alertas_estoque %}
+        <li>{{ item.PRODUTO }} - Estoque: {{ item.QUANTIDADE_ESTOQUE }} (Mínimo: {{ item.LIMITE_MINIMO }})</li>
+        {% endfor %}
+    </ul>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+{% endif %}
+
+<!-- Últimos Pedidos -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="bi bi-clock-history"></i> Últimos Pedidos</h5>
+            </div>
+            <div class="card-body">
+                {% if ultimos_pedidos %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Cliente</th>
+                                <th>Data</th>
+                                <th>Valor Total</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pedido in ultimos_pedidos %}
+                            <tr>
+                                <td>{{ pedido.ID_PEDIDO }}</td>
+                                <td>{{ pedido.CLIENTE }}</td>
+                                <td>{{ pedido.DATA_PEDIDO }}</td>
+                                <td class="fw-bold text-success">R$ {{ "{:,.2f}".format(pedido.VALOR_TOTAL).replace(',', '_').replace('.', ',').replace('_', '.') }}</td>
+                                <td>
+                                    {% if pedido.STATUS == 'PAGO' %}
+                                        <span class="badge bg-success">{{ pedido.STATUS }}</span>
+                                    {% elif pedido.STATUS == 'CANCELADO' %}
+                                        <span class="badge bg-danger">{{ pedido.STATUS }}</span>
+                                    {% elif pedido.STATUS == 'ENTREGUE' %}
+                                        <span class="badge bg-primary">{{ pedido.STATUS }}</span>
+                                    {% elif pedido.STATUS == 'ENVIADO' %}
+                                        <span class="badge bg-info">{{ pedido.STATUS }}</span>
+                                    {% else %}
+                                        <span class="badge bg-warning text-dark">{{ pedido.STATUS }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted text-center">Nenhum pedido registrado.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

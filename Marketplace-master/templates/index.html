@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Marketplace - Início{% endblock %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <h1 class="display-5 fw-bold"><i class="bi bi-shop"></i> Sistema Marketplace</h1>
+    <p class="text-muted">Painel de controle</p>
+</div>
+
+<!-- Cards Resumo -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white shadow">
+            <div class="card-body text-center">
+                <i class="bi bi-box-seam display-4"></i>
+                <h3 class="mt-2">{{ total_produtos }}</h3>
+                <p class="mb-0">Produtos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white shadow">
+            <div class="card-body text-center">
+                <i class="bi bi-people display-4"></i>
+                <h3 class="mt-2">{{ total_clientes }}</h3>
+                <p class="mb-0">Clientes</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark shadow">
+            <div class="card-body text-center">
+                <i class="bi bi-cart3 display-4"></i>
+                <h3 class="mt-2">{{ total_pedidos }}</h3>
+                <p class="mb-0">Pedidos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white shadow">
+            <div class="card-body text-center">
+                <i class="bi bi-credit-card display-4"></i>
+                <h3 class="mt-2">{{ total_pagamentos }}</h3>
+                <p class="mb-0">Pagamentos</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Últimos Pedidos -->
+<div class="card shadow">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0"><i class="bi bi-clock-history"></i> Últimos Pedidos</h5>
+    </div>
+    <div class="card-body">
+        {% if ultimos_pedidos %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Cliente</th>
+                        <th>Data</th>
+                        <th>Valor Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pedido in ultimos_pedidos %}
+                    <tr>
+                        <td>{{ pedido.ID_PEDIDO }}</td>
+                        <td>{{ pedido.CLIENTE }}</td>
+                        <td>{{ pedido.DATA_PEDIDO.strftime('%d/%m/%Y') }}</td>
+                        <td class="fw-bold text-success">R$ {{ "{:,.2f}".format(pedido.VALOR_TOTAL).replace(',', '_').replace('.', ',').replace('_', '.') }}</td>
+                        <td>
+                            {% if pedido.STATUS == 'PAGO' %}
+                                <span class="badge bg-success">{{ pedido.STATUS }}</span>
+                            {% elif pedido.STATUS == 'CANCELADO' %}
+                                <span class="badge bg-danger">{{ pedido.STATUS }}</span>
+                            {% elif pedido.STATUS == 'ENTREGUE' %}
+                                <span class="badge bg-primary">{{ pedido.STATUS }}</span>
+                            {% elif pedido.STATUS == 'ENVIADO' %}
+                                <span class="badge bg-info">{{ pedido.STATUS }}</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">{{ pedido.STATUS }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted text-center">Nenhum pedido registrado.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
